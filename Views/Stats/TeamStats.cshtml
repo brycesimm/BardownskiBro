@@ -1,0 +1,40 @@
+﻿@model List<Player>
+@{
+    ViewData["Title"] = "Western Conference";
+    var index = 1;
+}
+
+<div class="container-fluid">
+    <div class="row header">
+        <div class="col-1" align="center">Headshot</div>
+        <div class="col-1" align="center">Name</div>
+        <div class="col-1" align="center">Number</div>
+        <div class="col-1" align="center">Position</div>
+        <div class="col-1" align="center">R/L Handed</div>
+        <div class="col-1" align="center">Height (in.)</div>
+        <div class="col-1" align="center">Weight (lbs.)</div>
+        <div class="col-1" align="center">Birthdate</div>
+        <div class="col-1" align="center">Age</div>
+        <div class="col-1" align="center">Birth City</div>
+        <div class="col-1" align="center">Birth State/Prov</div>
+        <div class="col-1" align="center">Birth Country</div>
+    </div>
+    @foreach (Player player in Model)
+    {
+        <div class="row @(index%2==0?"rowdark":"rowlight")">
+            <div class="col-1" align="center"><img src="@player.headshot" width="84px" height="84px" /></div>
+            <div class="col-1" align="center">@player.firstName @player.lastName</div>
+            <div class="col-1" align="center">@player.sweaterNumber</div>
+            <div class="col-1" align="center">@player.position</div>
+            <div class="col-1" align="center">@player.shootsCatches</div>
+            <div class="col-1" align="center">@player.heightInInches</div>
+            <div class="col-1" align="center">@player.weightInPounds</div>
+            <div class="col-1" align="center">@player.birthDate</div>
+            <div class="col-1" align="center">@player.age</div>
+            <div class="col-1" align="center">@player.birthCity</div>
+            <div class="col-1" align="center">@player.birthStateProvince</div>
+            <div class="col-1" align="center">@player.birthCountry</div>
+        </div>
+        index++;
+    }
+</div>
