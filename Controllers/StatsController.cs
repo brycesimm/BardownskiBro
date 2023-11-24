@@ -70,7 +70,7 @@ namespace BardownskiBro.Controllers
                             {
                                 PlayerStats skaterStat = new PlayerStats()
                                 { 
-                                    playerId = Int32.TryParse(skater.GetValue("playerId").ToString(), out int didItWork) == true ? didItWork : 0,
+                                    playerId = Int32.TryParse(skater.GetValue("playerId").ToString(), out int playerIdOut) == true ? playerIdOut : 0,
                                     headshot = skater.GetValue("headshot").ToString(),
                                     firstName = skater.GetValue("firstName")["default"].ToString(),
                                     lastName = skater.GetValue("lastName")["default"].ToString(),
@@ -119,7 +119,26 @@ namespace BardownskiBro.Controllers
                                     JObject? skaterContent = JSONHelper.StringToJObject(skaterResponse);
                                     if(skaterContent is not null)
                                     {
-                                        skaterStat.sweaterNumber = skaterContent.GetValue("sweaterNumber").ToString();
+                                        Player player = new Player()
+                                        {
+                                            id = Int32.TryParse(skaterContent.GetValue("playerId").ToString(), out int idOut) == true ? idOut : 0,
+                                            headshot = skaterContent.GetValue("headshot").ToString(),
+                                            firstName = skaterContent.GetValue("firstName")["default"].ToString(),
+                                            lastName = skaterContent.GetValue("lastName")["default"].ToString(),
+                                            sweaterNumber = skaterContent.GetValue("sweaterNumber").ToString(),
+                                            position = "F",
+                                            positionCode = skaterContent.GetValue("position").ToString(),
+                                            shootsCatches = skaterContent.GetValue("shootsCatches").ToString(),
+                                            heightInInches = skaterContent.GetValue("heightInInches").ToString(),
+                                            weightInPounds = skaterContent.GetValue("weightInPounds").ToString(),
+                                            birthDate = skaterContent.GetValue("birthDate").ToString(),
+                                            birthCity = skaterContent.GetValue("birthCity")["default"].ToString(),
+                                            birthStateProvince = skaterContent.GetValue("birthStateProvince") is not null ? skaterContent.GetValue("birthStateProvince")["default"].ToString() : "",
+                                            birthCountry = skaterContent.GetValue("birthCountry").ToString()
+                                        };
+                                        player.age = ConvertBDayToAge.ConvertDateStringToAge(player.birthDate);
+                                        forwardsList.Add(player);
+                                        skaterStat.sweaterNumber = player.sweaterNumber;
                                     }
                                 }
                                 else
@@ -183,53 +202,18 @@ namespace BardownskiBro.Controllers
 
                             teamStatsViewModel.goalieStats = goalieStats;
                         }
-                    }
 
-                    //Get Everyone on Roster
-                    response = httpClient.GetStringAsync(BaseURL + @$"roster/{TeamName}/current").Result;
-                    if (response is not null)
-                    {
-                        JObject? content = JSONHelper.StringToJObject(response);
-                        if (content is not null)
-                        {
-                            string? forwardsOnlyString = content["forwards"].ToString();
-                            JArray? forwards = JArray.Parse(forwardsOnlyString);
+                        teamStatsViewModel.forwardsList = forwardsList;
+                        teamStatsViewModel.ABRVTeamName = TeamName;
 
-                            foreach (JObject forward in forwards)
-                            {
-
-                                Player player = new Player()
-                                {
-                                    id = Int32.TryParse(forward.GetValue("id").ToString(), out int didItWork) == true ? didItWork : 0,
-                                    headshot = forward.GetValue("headshot").ToString(),
-                                    firstName = forward.GetValue("firstName")["default"].ToString(),
-                                    lastName = forward.GetValue("lastName")["default"].ToString(),
-                                    sweaterNumber = forward.GetValue("sweaterNumber").ToString(),
-                                    position = "F",
-                                    positionCode = forward.GetValue("positionCode").ToString(),
-                                    shootsCatches = forward.GetValue("shootsCatches").ToString(),
-                                    heightInInches = forward.GetValue("heightInInches").ToString(),
-                                    weightInPounds = forward.GetValue("weightInPounds").ToString(),
-                                    birthDate = forward.GetValue("birthDate").ToString(),
-                                    birthCity = forward.GetValue("birthCity")["default"].ToString(),
-                                    birthStateProvince = forward.GetValue("birthStateProvince") is not null ? forward.GetValue("birthStateProvince")["default"].ToString() : "",
-                                    birthCountry = forward.GetValue("birthCountry").ToString()
-                                };
-                                player.age = ConvertBDayToAge.ConvertDateStringToAge(player.birthDate);
-                                forwardsList.Add(player);
-                            }
-
-                            teamStatsViewModel.forwardsList = forwardsList;
-
-                            return View(teamStatsViewModel);
-                        }
-
+                        return View(teamStatsViewModel);
                     }
                     else
                     {
                         return BadRequest("NHL API Returned A Null Response Result");
                     }
-                }catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     if (_configuration.GetValue<string>("Environment") == "DEV")
                     {

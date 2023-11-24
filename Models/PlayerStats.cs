@@ -2,33 +2,6 @@
 {
     public class PlayerStats
     {
-        /*
-         * {
-            "id": 8476826,
-            "headshot": "https://assets.nhle.com/mugs/nhl/20232024/SEA/8476826.png",
-            "firstName": {
-                "default": "Yanni"
-            },
-            "lastName": {
-                "default": "Gourde"
-            },
-            "sweaterNumber": 37,
-            "positionCode": "C",
-            "shootsCatches": "L",
-            "heightInInches": 69,
-            "weightInPounds": 174,
-            "heightInCentimeters": 175,
-            "weightInKilograms": 79,
-            "birthDate": "1991-12-15",
-            "birthCity": {
-                "default": "Saint-Narcisse"
-            },
-            "birthCountry": "CAN",
-            "birthStateProvince": {
-                "default": "QC"
-            }
-        }
-        */
         public int? playerId { get; set; }
         public string? headshot { get; set; }
         public string? firstName { get; set; }

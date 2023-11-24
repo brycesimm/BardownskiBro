@@ -1,40 +1,68 @@
 ﻿@model TeamStatsViewModel
 @{
-    ViewData["Title"] = "Western Conference";
+    ViewData["Title"] = Model.ABRVTeamName + "Team Stats";
     var index = 1;
 }
-
+<h1>@Model.ABRVTeamName Team Stats</h1>
+<h2>Forwards</h2>
 <div class="container-fluid">
     <div class="row header">
-        <div class="col-1" style="font-family:Oswald-Medium" align="center">Headshot</div>
-        <div class="col-1" style="font-family:Oswald-Medium" align="center">Name</div>
-        <div class="col-1" style="font-family:Oswald-Medium" align="center">Number</div>
-        <div class="col-1" style="font-family:Oswald-Medium" align="center">Position</div>
-        <div class="col-1" style="font-family:Oswald-Medium" align="center">R/L Handed</div>
-        <div class="col-1" style="font-family:Oswald-Medium" align="center">Height (in.)</div>
-        <div class="col-1" style="font-family:Oswald-Medium" align="center">Weight (lbs.)</div>
-        <div class="col-1" style="font-family:Oswald-Medium" align="center">Birthdate</div>
-        <div class="col-1" style="font-family:Oswald-Medium" align="center">Age</div>
-        <div class="col-1" style="font-family:Oswald-Medium" align="center">Birth City</div>
-        <div class="col-1" style="font-family:Oswald-Medium" align="center">Birth State/Prov</div>
-        <div class="col-1" style="font-family:Oswald-Medium" align="center">Birth Country</div>
+        <div class="col-1 border border-dark border-2" style="font-family:Oswald-Medium" align="center">Headshot</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Name</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">#</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Position</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Games Played</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Goals</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Assists</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Points</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">+/-</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">PIM</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Shots</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Shooting %</div>
     </div>
-    @foreach (Player player in Model.forwardsList)
+    <br />
+    @foreach (PlayerStats forward in Model.skaterStats.Where(x => x.position == "F").OrderByDescending(x => Int32.Parse(x.points)).ToList())
     {
-        <div class="row @(index%2==0?"rowdark":"rowlight")">
-            <div class="col-1" align="center"><img src="@player.headshot" width="84px" height="84px" /></div>
-            <div class="col-1" style="font-family:Oswald-Regular" align="center">@player.firstName @player.lastName</div>
-            <div class="col-1" style="font-family:Oswald-Regular" align="center">@player.sweaterNumber</div>
-            <div class="col-1" style="font-family:Oswald-Regular" align="center">@player.position</div>
-            <div class="col-1" style="font-family:Oswald-Regular" align="center">@player.shootsCatches</div>
-            <div class="col-1" style="font-family:Oswald-Regular" align="center">@player.heightInInches</div>
-            <div class="col-1" style="font-family:Oswald-Regular" align="center">@player.weightInPounds</div>
-            <div class="col-1" style="font-family:Oswald-Regular" align="center">@player.birthDate</div>
-            <div class="col-1" style="font-family:Oswald-Regular" align="center">@player.age</div>
-            <div class="col-1" style="font-family:Oswald-Regular" align="center">@player.birthCity</div>
-            <div class="col-1" style="font-family:Oswald-Regular" align="center">@player.birthStateProvince</div>
-            <div class="col-1" style="font-family:Oswald-Regular" align="center">@player.birthCountry</div>
+        Player player = Model.forwardsList.Where(x => x.id == forward.playerId).FirstOrDefault();
+        <a data-bs-toggle="collapse" href=".multi-collapse@(index)">
+            <div class="row">
+                <div class="col-1 border border-dark border-2" style="font-family:Oswald-Regular" align="center"><img src="@player.headshot" width="84px" height="84px" /></div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.firstName <br /> @forward.lastName</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@player.sweaterNumber</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.positionCode</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.gamesPlayed</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.goals</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.assists</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.points</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.plusMinus</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.penaltyMinutes</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.shots</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@Math.Round(Double.Parse(forward.shootingPctg), 3)</div>
+            </div>
+        </a>
+        <div class="row header collapse multi-collapse@(index)" id="playerInfoHeader@(index)">
+            <div class="col-1 border border-dark border-2 border-top-0" style="font-family:Oswald-Medium" align="center">Avg. Ice Time</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">R/L Handed</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Height (in.)</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Weight (lbs.)</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birthdate</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Age</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birth City</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birth State/Prov</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birth Country</div>
         </div>
+            <div class="row collapse multi-collapse@(index)" id="playerInfo@(index)">
+            <div class="col-1 border border-dark border-2 border-top-0" style="font-family:Oswald-Regular" align="center">@Math.Round((Double.Parse(forward.avgTimeOnIcePerGame) / (double)60.0), 3)</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.shootsCatches</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.heightInInches</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.weightInPounds</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthDate</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.age</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthCity</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthStateProvince</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthCountry</div>
+        </div>
+        <br />
         index++;
     }
 </div>
