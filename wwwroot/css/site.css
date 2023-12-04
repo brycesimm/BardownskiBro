@@ -54,3 +54,13 @@ body {
     font-family: "Oswald-Bold";
     src: url('Oswald-Bold.ttf');
 }
+
+.black-link {
+    text-decoration: none;
+    color: black;
+}
+
+.black-link:hover {
+    text-decoration: none;
+    color: black;
+}

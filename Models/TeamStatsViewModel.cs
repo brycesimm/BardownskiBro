@@ -6,7 +6,7 @@ namespace BardownskiBro.Models
         public List<PlayerStats>? goalieStats { get; set; }
         public List<Player>? forwardsList { get; set; }
         public List<Player>? defensemenList { get; set; }
-        public List<Player>? goalieList {get; set; }
+        public List<Player>? goaliesList {get; set; }
         public string? ABRVTeamName { get; set; }
     }
 }
