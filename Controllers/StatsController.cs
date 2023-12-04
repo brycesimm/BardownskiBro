@@ -54,6 +54,8 @@ namespace BardownskiBro.Controllers
                         seasonType = "2";
                     }
 
+                    teamStatsViewModel.teamStats = GetTeamStats(TeamId, season, seasonType);
+
                     skaterStats = GetSkaterStats(TeamName, season, seasonType);
 
                     foreach (var skater in skaterStats)
@@ -107,6 +109,69 @@ namespace BardownskiBro.Controllers
             }
         }
 
+        public TeamStats GetTeamStats(string teamId, string season = "", string seasonType = "")
+        {
+            if (season == "")
+            {
+                season = DateTime.Now.Year.ToString() + (DateTime.Now.Year + 1).ToString();
+            }
+            if (seasonType == "")
+            {
+                seasonType = "2";
+            }
+
+            HttpClient httpClient = new HttpClient();
+
+            //Get Team Stats
+            string? response = httpClient.GetStringAsync(BaseURL2 + @$"team/summary?cayenneExp=seasonId={season}%20and%20gameTypeId={seasonType}").Result;
+
+            if(response is not null)
+            {
+                JObject? content = JSONHelper.StringToJObject(response);
+                if(content is not null)
+                {
+                    string? teamsStats = content["data"]?.ToString();
+                    JArray? teams = JArray.Parse(teamsStats);
+
+                    foreach(JObject team in teams)
+                    {
+                        if(team.GetValue("teamId")?.ToString() == teamId)
+                        {
+                            TeamStats teamStats = new TeamStats()
+                            {
+                                teamId = team.GetValue("teamId")?.ToString(),
+                                faceoffWinPct = team.GetValue("faceoffWinPct")?.ToString(),
+                                gamesPlayed = team.GetValue("gamesPlayed")?.ToString(),
+                                goalsAgainst = team.GetValue("goalsAgainst")?.ToString(),
+                                goalsAgainstPerGame = team.GetValue("goalsAgainstPerGame")?.ToString(),
+                                goalsFor = team.GetValue("goalsFor")?.ToString(),
+                                goalsForPerGame = team.GetValue("goalsForPerGame")?.ToString(),
+                                losses = team.GetValue("losses")?.ToString(),
+                                otLosses = team.GetValue("otLosses")?.ToString(),
+                                penaltyKillNetPct = team.GetValue("penaltyKillNetPct")?.ToString(),
+                                penaltyKillPct = team.GetValue("penaltyKillPct")?.ToString(),
+                                pointPct = team.GetValue("pointPct")?.ToString(),
+                                points = team.GetValue("points")?.ToString(),
+                                powerPlayNetPct = team.GetValue("powerPlayNetPct")?.ToString(),
+                                powerPlayPct = team.GetValue("powerPlayPct")?.ToString(),
+                                regulationAndOtWins = team.GetValue("regulationAndOtWins")?.ToString(),
+                                seasonId = team.GetValue("seasonId")?.ToString(),
+                                shotsAgainstPerGame = team.GetValue("shotsAgainstPerGame")?.ToString(),
+                                shotsForPerGame = team.GetValue("shotsForPerGame")?.ToString(),
+                                teamFullName = team.GetValue("teamFullName")?.ToString(),
+                                ties = team.GetValue("ties")?.ToString(),
+                                wins = team.GetValue("wins")?.ToString(),
+                                winsInRegulation = team.GetValue("winsInRegulation")?.ToString(),
+                                winsInShootout = team.GetValue("winsInShootout")?.ToString()
+                            };
+                            return teamStats;
+                        }
+                    }
+                }
+            }
+            return new Models.TeamStats();
+        }
+
         public List<PlayerStats> GetSkaterStats(string TeamName, string season = "", string seasonType = "")
         {
             List<PlayerStats> skaterStats = new List<PlayerStats>();
@@ -130,33 +195,33 @@ namespace BardownskiBro.Controllers
                 if (content is not null)
                 {
                     //Get Skater Stats
-                    string? skatersOnlyString = content["skaters"].ToString();
+                    string? skatersOnlyString = content["skaters"]?.ToString();
                     JArray? skaters = JArray.Parse(skatersOnlyString);
 
                     foreach (JObject skater in skaters)
                     {
                         PlayerStats skaterStat = new PlayerStats()
                         {
-                            playerId = Int32.TryParse(skater.GetValue("playerId").ToString(), out int playerIdOut) == true ? playerIdOut : 0,
-                            headshot = skater.GetValue("headshot").ToString(),
-                            firstName = skater.GetValue("firstName")["default"].ToString(),
-                            lastName = skater.GetValue("lastName")["default"].ToString(),
-                            positionCode = skater.GetValue("positionCode").ToString(),
-                            gamesPlayed = skater.GetValue("gamesPlayed").ToString(),
-                            goals = skater.GetValue("goals").ToString(),
-                            assists = skater.GetValue("assists").ToString(),
-                            points = skater.GetValue("points").ToString(),
-                            plusMinus = skater.GetValue("plusMinus").ToString(),
-                            penaltyMinutes = skater.GetValue("penaltyMinutes").ToString(),
-                            powerPlayGoals = skater.GetValue("powerPlayGoals").ToString(),
-                            shorthandedGoals = skater.GetValue("shorthandedGoals").ToString(),
-                            gameWinningGoals = skater.GetValue("gameWinningGoals").ToString(),
-                            overtimeGoals = skater.GetValue("overtimeGoals").ToString(),
-                            shots = skater.GetValue("shots").ToString(),
-                            shootingPctg = skater.GetValue("shootingPctg").ToString(),
-                            avgTimeOnIcePerGame = skater.GetValue("avgTimeOnIcePerGame").ToString(),
-                            avgShiftsPerGame = skater.GetValue("avgShiftsPerGame").ToString(),
-                            faceoffWinPctg = skater.GetValue("faceoffWinPctg").ToString()
+                            playerId = Int32.TryParse(skater.GetValue("playerId")?.ToString(), out int playerIdOut) == true ? playerIdOut : 0,
+                            headshot = skater.GetValue("headshot")?.ToString(),
+                            firstName = skater.GetValue("firstName")?["default"]?.ToString(),
+                            lastName = skater.GetValue("lastName")?["default"]?.ToString(),
+                            positionCode = skater.GetValue("positionCode")?.ToString(),
+                            gamesPlayed = skater.GetValue("gamesPlayed")?.ToString(),
+                            goals = skater.GetValue("goals")?.ToString(),
+                            assists = skater.GetValue("assists")?.ToString(),
+                            points = skater.GetValue("points")?.ToString(),
+                            plusMinus = skater.GetValue("plusMinus")?.ToString(),
+                            penaltyMinutes = skater.GetValue("penaltyMinutes")?.ToString(),
+                            powerPlayGoals = skater.GetValue("powerPlayGoals")?.ToString(),
+                            shorthandedGoals = skater.GetValue("shorthandedGoals")?.ToString(),
+                            gameWinningGoals = skater.GetValue("gameWinningGoals")?.ToString(),
+                            overtimeGoals = skater.GetValue("overtimeGoals")?.ToString(),
+                            shots = skater.GetValue("shots")?.ToString(),
+                            shootingPctg = skater.GetValue("shootingPctg")?.ToString(),
+                            avgTimeOnIcePerGame = skater.GetValue("avgTimeOnIcePerGame")?.ToString(),
+                            avgShiftsPerGame = skater.GetValue("avgShiftsPerGame")?.ToString(),
+                            faceoffWinPctg = skater.GetValue("faceoffWinPctg")?.ToString()
                         };
                         //assign forward, defenseman, or goalie based on position code since endpoint doesn't include it
                         switch (skaterStat.positionCode)
@@ -211,34 +276,34 @@ namespace BardownskiBro.Controllers
                 if (content is not null)
                 {
                     //Get Goalie Stats
-                    string? goaliesOnlyString = content["goalies"].ToString();
+                    string? goaliesOnlyString = content["goalies"]?.ToString();
                     JArray? goalies = JArray.Parse(goaliesOnlyString);
 
                     foreach (JObject goalie in goalies)
                     {
                         PlayerStats goalieStat = new PlayerStats()
                         {
-                            playerId = Int32.TryParse(goalie.GetValue("playerId").ToString(), out int didItWork) == true ? didItWork : 0,
-                            headshot = goalie.GetValue("headshot").ToString(),
-                            firstName = goalie.GetValue("firstName")["default"].ToString(),
-                            lastName = goalie.GetValue("lastName")["default"].ToString(),
-                            gamesPlayed = goalie.GetValue("gamesPlayed").ToString(),
-                            gamesStarted = goalie.GetValue("gamesStarted").ToString(),
-                            wins = goalie.GetValue("wins").ToString(),
-                            losses = goalie.GetValue("losses").ToString(),
-                            ties = goalie.GetValue("ties").ToString(),
-                            overtimeLosses = goalie.GetValue("overtimeLosses").ToString(),
-                            goalsAgainstAverage = goalie.GetValue("goalsAgainstAverage").ToString(),
-                            savePercentage = goalie.GetValue("savePercentage").ToString(),
-                            shotsAgainst = goalie.GetValue("shotsAgainst").ToString(),
-                            saves = goalie.GetValue("saves").ToString(),
-                            goalsAgainst = goalie.GetValue("goalsAgainst").ToString(),
-                            shutouts = goalie.GetValue("shutouts").ToString(),
-                            goals = goalie.GetValue("goals").ToString(),
-                            assists = goalie.GetValue("assists").ToString(),
-                            points = goalie.GetValue("points").ToString(),
-                            penaltyMinutes = goalie.GetValue("penaltyMinutes").ToString(),
-                            timeOnIce = goalie.GetValue("timeOnIce").ToString()
+                            playerId = Int32.TryParse(goalie.GetValue("playerId")?.ToString(), out int didItWork) == true ? didItWork : 0,
+                            headshot = goalie.GetValue("headshot")?.ToString(),
+                            firstName = goalie.GetValue("firstName")?["default"]?.ToString(),
+                            lastName = goalie.GetValue("lastName")?["default"]?.ToString(),
+                            gamesPlayed = goalie.GetValue("gamesPlayed")?.ToString(),
+                            gamesStarted = goalie.GetValue("gamesStarted")?.ToString(),
+                            wins = goalie.GetValue("wins")?.ToString(),
+                            losses = goalie.GetValue("losses")?.ToString(),
+                            ties = goalie.GetValue("ties")?.ToString(),
+                            overtimeLosses = goalie.GetValue("overtimeLosses")?.ToString(),
+                            goalsAgainstAverage = goalie.GetValue("goalsAgainstAverage")?.ToString(),
+                            savePercentage = goalie.GetValue("savePercentage")?.ToString(),
+                            shotsAgainst = goalie.GetValue("shotsAgainst")?.ToString(),
+                            saves = goalie.GetValue("saves")?.ToString(),
+                            goalsAgainst = goalie.GetValue("goalsAgainst")?.ToString(),
+                            shutouts = goalie.GetValue("shutouts")?.ToString(),
+                            goals = goalie.GetValue("goals")?.ToString(),
+                            assists = goalie.GetValue("assists")?.ToString(),
+                            points = goalie.GetValue("points")?.ToString(),
+                            penaltyMinutes = goalie.GetValue("penaltyMinutes")?.ToString(),
+                            timeOnIce = goalie.GetValue("timeOnIce")?.ToString()
                         };
                         //assign forward, defenseman, or goalie based on position code since endpoint doesn't include it
                         goalieStat.position = "G";
