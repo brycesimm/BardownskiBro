@@ -1,0 +1,215 @@
+﻿@model TeamStatsViewModel
+@{
+    ViewData["Title"] = Model.ABRVTeamName + "Team Stats";
+    var index = 1;
+}
+<h1>@Model.ABRVTeamName Team Stats</h1>
+
+<h2><u><a class="black-link black-link:hover" data-bs-toggle="collapse" href=".multi-collapse-forwards">Forwards</a></u></h2>
+<div class="container-fluid collapse multi-collapse-forwards">
+    <div class="row header">
+        <div class="col-1 border border-dark border-2" style="font-family:Oswald-Medium" align="center">Headshot</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Name</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">#</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Position</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Games Played</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Goals</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Assists</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Points</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">+/-</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">PIM</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Shots</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Shooting %</div>
+    </div>
+    <br />
+    @foreach (PlayerStats forward in Model.skaterStats.Where(x => x.position == "F").OrderByDescending(x => Int32.Parse(x.points)).ToList())
+    {
+        Player player = Model.forwardsList.Where(x => x.id == forward.playerId).FirstOrDefault();
+        <a data-bs-toggle="collapse" href=".multi-collapse-forwards@(index)">
+            <div class="row black-link black-link:hover">
+                <div class="col-1 border border-dark border-2" style="font-family:Oswald-Regular" align="center"><img src="@player.headshot" width="84px" height="84px" /></div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.firstName <br /> @forward.lastName</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@player.sweaterNumber</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.positionCode</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.gamesPlayed</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.goals</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.assists</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.points</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.plusMinus</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.penaltyMinutes</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@forward.shots</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@Math.Round(Double.Parse(forward.shootingPctg), 3)</div>
+            </div>
+        </a>
+        <div class="row header collapse multi-collapse-forwards@(index)" id="playerInfoHeader-forwards@(index)">
+            <div class="col-1 border border-dark border-2 border-top-0" style="font-family:Oswald-Medium" align="center">Avg. Ice Time</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">R/L Handed</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Height (in.)</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Weight (lbs.)</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birthdate</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Age</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birth City</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birth State/Prov</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birth Country</div>
+        </div>
+        <div class="row collapse multi-collapse-forwards@(index)" id="playerInfo-forwards@(index)">
+            <div class="col-1 border border-dark border-2 border-top-0" style="font-family:Oswald-Regular" align="center">@Math.Round((Double.Parse(forward.avgTimeOnIcePerGame) / (double)60.0), 3)</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.shootsCatches</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.heightInInches</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.weightInPounds</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthDate</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.age</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthCity</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthStateProvince</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthCountry</div>
+        </div>
+        <br />
+        index++;
+    }
+</div>
+
+<h2><u><a class="black-link black-link:hover" data-bs-toggle="collapse" href=".multi-collapse-defensemen">Defensemen</a></u></h2>
+<div class="container-fluid collapse multi-collapse-defensemen">
+    <div class="row header">
+        <div class="col-1 border border-dark border-2" style="font-family:Oswald-Medium" align="center">Headshot</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Name</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">#</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Position</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Games Played</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Goals</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Assists</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Points</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">+/-</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">PIM</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Shots</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Shooting %</div>
+    </div>
+    <br />
+    @foreach (PlayerStats defenseman in Model.skaterStats.Where(x => x.position == "D").OrderByDescending(x => Int32.Parse(x.points)).ToList())
+    {
+        Player player = Model.defensemenList.Where(x => x.id == defenseman.playerId).FirstOrDefault();
+        <a data-bs-toggle="collapse" href=".multi-collapse-defensemen@(index)">
+            <div class="row black-link black-link:hover">
+                <div class="col-1 border border-dark border-2" style="font-family:Oswald-Regular" align="center"><img src="@player.headshot" width="84px" height="84px" /></div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@defenseman.firstName <br /> @defenseman.lastName</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@player.sweaterNumber</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@defenseman.positionCode</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@defenseman.gamesPlayed</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@defenseman.goals</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@defenseman.assists</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@defenseman.points</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@defenseman.plusMinus</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@defenseman.penaltyMinutes</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@defenseman.shots</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@Math.Round(Double.Parse(defenseman.shootingPctg), 3)</div>
+            </div>
+        </a>
+        <div class="row header collapse multi-collapse-defensemen@(index)" id="playerInfoHeader-defensemen@(index)">
+            <div class="col-1 border border-dark border-2 border-top-0" style="font-family:Oswald-Medium" align="center">Avg. Ice Time</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">R/L Handed</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Height (in.)</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Weight (lbs.)</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birthdate</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Age</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birth City</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birth State/Prov</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birth Country</div>
+        </div>
+        <div class="row collapse multi-collapse-defensemen@(index)" id="playerInfo-defensemen@(index)">
+            <div class="col-1 border border-dark border-2 border-top-0" style="font-family:Oswald-Regular" align="center">@Math.Round((Double.Parse(defenseman.avgTimeOnIcePerGame) / (double)60.0), 3)</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.shootsCatches</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.heightInInches</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.weightInPounds</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthDate</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.age</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthCity</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthStateProvince</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthCountry</div>
+        </div>
+        <br />
+        index++;
+    }
+</div>
+
+<h2><u><a class="black-link black-link:hover" data-bs-toggle="collapse" href=".multi-collapse-goalies">Goalies</a></u></h2>
+<div class="container-fluid collapse multi-collapse-goalies">
+    <div class="row header">
+        <div class="col-1 border border-dark border-2" style="font-family:Oswald-Medium" align="center">Headshot</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Name</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">#</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Position</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Games Played</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Games Started</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Wins</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Losses</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">OTLs</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">Ties</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">GAA</div>
+        <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Medium" align="center">SV%</div>
+    </div>
+    <br />
+    @foreach (PlayerStats goalie in Model.goalieStats.Where(x => x.position == "G").OrderByDescending(x => Int32.Parse(x.points)).ToList())
+    {
+        Player player = Model.goaliesList.Where(x => x.id == goalie.playerId).FirstOrDefault();
+        <a data-bs-toggle="collapse" href=".multi-collapse-goalies@(index)">
+            <div class="row black-link black-link:hover">
+                <div class="col-1 border border-dark border-2" style="font-family:Oswald-Regular" align="center"><img src="@player.headshot" width="84px" height="84px" /></div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@goalie.firstName <br /> @goalie.lastName</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@player.sweaterNumber</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@goalie.positionCode</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@goalie.gamesPlayed</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@goalie.gamesStarted</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@goalie.wins</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@goalie.losses</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@goalie.overtimeLosses</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@goalie.ties</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@Math.Round(Double.Parse(goalie.goalsAgainstAverage), 3)</div>
+                <div class="col-1 border border-dark border-2 border-start-0" style="font-family:Oswald-Regular" align="center">@Math.Round(Double.Parse(goalie.savePercentage), 3)</div>
+            </div>
+        </a>
+        <div class="row header collapse multi-collapse-goalies@(index)" id="moreStatInfoHeader-goalies@(index)">
+            <div class="col-1 border border-dark border-2 border-top-0" style="font-family:Oswald-Medium" align="center">Avg. Ice Time</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Shots Against</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Saves</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Goals Against</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Shutouts</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Goals</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Assists</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Points</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">PIM</div>
+        </div>
+        <div class="row collapse multi-collapse-goalies@(index)" id="moreStatInfo-goalies@(index)">
+            <div class="col-1 border border-dark border-2 border-top-0" style="font-family:Oswald-Regular" align="center">@Math.Round(((Double.Parse(goalie.timeOnIce) / (double)60.0)) / Int32.Parse(goalie.gamesPlayed), 3)</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@goalie.shotsAgainst</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@goalie.saves</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@goalie.goalsAgainst</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@goalie.shutouts</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@goalie.goals</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@goalie.assists</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@goalie.points</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@goalie.penaltyMinutes</div>
+        </div>
+        <div class="row header collapse multi-collapse-goalies@(index)" id="playerInfoHeader-goalies@(index)">
+            <div class="col-1 border border-dark border-2 border-start-1 border-top-0" style="font-family:Oswald-Medium" align="center">R/L Handed</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Height (in.)</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Weight (lbs.)</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birthdate</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Age</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birth City</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birth State/Prov</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Medium" align="center">Birth Country</div>
+        </div>
+        <div class="row collapse multi-collapse-goalies@(index)" id="playerInfo-goalies@(index)">
+            <div class="col-1 border border-dark border-2 border-start-1 border-top-0" style="font-family:Oswald-Regular" align="center">@player.shootsCatches</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.heightInInches</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.weightInPounds</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthDate</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.age</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthCity</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthStateProvince</div>
+            <div class="col-1 border border-dark border-2 border-start-0 border-top-0" style="font-family:Oswald-Regular" align="center">@player.birthCountry</div>
+        </div>
+        <br />
+        index++;
+    }
+</div>

@@ -29,50 +29,51 @@
             }
         }
         */
-        public int Id { get; set; }
-        public string? Headshot { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set;}
-        public string? Number {  get; set; } 
+        public int? id { get; set; }
+        public string? headshot { get; set; }
+        public string? firstName { get; set; }
+        public string? lastName { get; set;}
+        public string? sweaterNumber {  get; set; } 
         //Forward, Defenseman, Goalie
-        public string? Position { get; set; }
+        public string? position { get; set; }
         //L,R,C,D,G
-        public string? PositionCode { get; set; }
-        public string? DominantHand { get; set; }
-        public string? HeightInches { get; set; }
-        public string? weightPounds { get; set; }
-        public string? Birthday { get; set; }
-        public int AgeInYears()
-        {
-            DateTime now = DateTime.Now;
-            int age = 0;
-            if (Birthday != null)
-            {
-                try
-                {
-                    DateTime Bday = DateTime.Parse(Birthday);
-                    age = now.Year - Bday.Year;
+        public string? positionCode { get; set; }
+        public string? shootsCatches { get; set; }
+        public string? heightInInches { get; set; }
+        public string? weightInPounds { get; set; }
+        public string? birthDate { get; set; }
+        public int? age { get; set; }
+        //public int ageInYears()
+        //{
+        //    DateTime now = DateTime.Now;
+        //    int age = 0;
+        //    if (birthDate != null)
+        //    {
+        //        try
+        //        {
+        //            DateTime Bday = DateTime.Parse(birthDate);
+        //            age = now.Year - Bday.Year;
 
-                    if(Bday.AddYears(age) > now)
-                    {
-                        age--;
-                    }
+        //            if(Bday.AddYears(age) > now)
+        //            {
+        //                age--;
+        //            }
 
-                    return age;
-                }
-                catch(Exception e) 
-                {
-                    return -1;
-                }
-            }
-            else
-            {
-                return -1;
-            }
-        }
-        public string? BirthCity { get; set; }
-        public string? BirthStateProvince { get; set; }
-        public string? BirthCountry { get; set; }
+        //            return age;
+        //        }
+        //        catch(Exception e) 
+        //        {
+        //            return -1;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return -1;
+        //    }
+        //}
+        public string? birthCity { get; set; }
+        public string? birthStateProvince { get; set; }
+        public string? birthCountry { get; set; }
 
     }
 }
